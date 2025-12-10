@@ -43,6 +43,9 @@ jobs:
           X64_SHA=$(shasum -a 256 x64.pkg | cut -d ' ' -f 1)
           echo "x64_sha256=$X64_SHA" >> $GITHUB_OUTPUT
 
+          # Clean up downloaded files
+          rm -f arm64.pkg x64.pkg
+
       - name: Update cask
         run: |
           VERSION="${{ steps.version.outputs.version }}"

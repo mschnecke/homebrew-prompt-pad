@@ -1,6 +1,6 @@
 # Homebrew Tap for PromptPad
 
-This is the official Homebrew tap for [PromptPad](https://github.com/mschnecke/prompt-pad), a Spotlight-style prompt launcher for macOS.
+Official Homebrew cask for [PromptPad](https://github.com/mschnecke/prompt-pad), a Spotlight-style prompt launcher for macOS.
 
 ## Installation
 
@@ -39,8 +39,20 @@ Default hotkey: `Cmd+Shift+P`
 
 ## Data Locations
 
-- Prompts: `~/.prompt-pad/prompts/`
-- Settings: `~/.prompt-pad.json`
+| Location | Purpose |
+|----------|---------|
+| `~/.prompt-pad/prompts/` | User prompts |
+| `~/.prompt-pad.json` | Settings |
+
+## Architecture Support
+
+The cask automatically installs the correct version for your Mac:
+- Apple Silicon (M1/M2/M3): `aarch64.pkg`
+- Intel: `x64.pkg`
+
+## Automatic Updates
+
+This tap automatically stays in sync with PromptPad releases. When a new version is published to the [main repository](https://github.com/mschnecke/prompt-pad), a GitHub Actions workflow updates this cask with new version numbers and checksums.
 
 ## Links
 

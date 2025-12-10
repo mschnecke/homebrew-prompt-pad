@@ -37,9 +37,12 @@ The cask auto-updates when the main prompt-pad repo publishes a release:
 1. Main repo triggers `repository_dispatch` event to this repo
 2. Workflow downloads ARM64 and Intel .pkg files
 3. Calculates SHA256 checksums
-4. Creates PR with updated version and checksums
+4. Updates cask file with new version and checksums
+5. Creates PR and auto-merges it
 
 Manual updates: Actions > Update Cask > Run workflow > Enter version
+
+**Note:** Auto-merge requires "Allow auto-merge" enabled in repository settings.
 
 ## Cask Architecture
 
