@@ -4,7 +4,7 @@
 **Main App Repository:** github.com/mschnecke/prompt-pad  
 **License:** Proprietary - Pisum Projects  
 **Document Version:** 1.0.0  
-**Last Updated:** 2025-01-XX
+**Last Updated:** 2025-12-10
 
 ---
 
@@ -30,6 +30,9 @@ homebrew-prompt-pad/
 │       └── update-cask.yml      # Automated cask updates
 ├── Casks/
 │   └── prompt-pad.rb            # Homebrew cask definition
+├── docs/
+│   ├── homebrew-prompt-pad-PRD.md  # Product requirements document
+│   └── implementation-plan.md      # Implementation plan
 ├── CLAUDE.md                    # Claude Code guidance
 └── README.md                    # Repository documentation
 ```
@@ -61,15 +64,15 @@ cask "prompt-pad" do
   pkg "PromptPad_#{version}_#{arch == :arm64 ? 'aarch64' : 'x64'}.pkg"
 
   # Uninstall: remove pkg receipt and app
-  uninstall pkgutil: "com.promptpad.app",
+  uninstall pkgutil: "net.pisum.promptpad.app",
             delete: "/Applications/PromptPad.app"
 
   # Zap: remove all user data on full uninstall
   zap trash: [
-    "~/Library/Application Support/com.promptpad.app",
-    "~/Library/Caches/com.promptpad.app",
-    "~/Library/Preferences/com.promptpad.app.plist",
-    "~/Library/Saved Application State/com.promptpad.app.savedState",
+    "~/Library/Application Support/net.pisum.promptpad.app",
+    "~/Library/Caches/net.pisum.promptpad.app",
+    "~/Library/Preferences/net.pisum.promptpad.app.plist",
+    "~/Library/Saved Application State/net.pisum.promptpad.app.savedState",
     "~/.prompt-pad",
     "~/.prompt-pad.json",
   ]

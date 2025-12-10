@@ -1,0 +1,65 @@
+name: Update Cask
+
+on:
+  repository_dispatch:
+    types: [update-cask]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to update to'
+        required: true
+
+jobs:
+  update:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" == "repository_dispatch" ]; then
+            echo "version=${{ github.event.client_payload.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Download and calculate checksums
+        id: checksums
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+
+          # Download ARM64 pkg
+          curl -L -o arm64.pkg "https://github.com/mschnecke/prompt-pad/releases/download/v${VERSION}/PromptPad_${VERSION}_aarch64.pkg"
+          ARM64_SHA=$(shasum -a 256 arm64.pkg | cut -d ' ' -f 1)
+          echo "arm64_sha256=$ARM64_SHA" >> $GITHUB_OUTPUT
+
+          # Download x64 pkg
+          curl -L -o x64.pkg "https://github.com/mschnecke/prompt-pad/releases/download/v${VERSION}/PromptPad_${VERSION}_x64.pkg"
+          X64_SHA=$(shasum -a 256 x64.pkg | cut -d ' ' -f 1)
+          echo "x64_sha256=$X64_SHA" >> $GITHUB_OUTPUT
+
+      - name: Update cask
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          ARM64_SHA="${{ steps.checksums.outputs.arm64_sha256 }}"
+          X64_SHA="${{ steps.checksums.outputs.x64_sha256 }}"
+
+          sed -i '' "s/version \".*\"/version \"$VERSION\"/" Casks/prompt-pad.rb
+          sed -i '' "s/arm:   \".*\"/arm:   \"$ARM64_SHA\"/" Casks/prompt-pad.rb
+          sed -i '' "s/intel: \".*\"/intel: \"$X64_SHA\"/" Casks/prompt-pad.rb
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Update PromptPad cask to v${{ steps.version.outputs.version }}"
+          title: "Update PromptPad to v${{ steps.version.outputs.version }}"
+          body: |
+            Automated cask update for PromptPad v${{ steps.version.outputs.version }}
+
+            **Package checksums:**
+            - ARM64 (.pkg): `${{ steps.checksums.outputs.arm64_sha256 }}`
+            - x64 (.pkg): `${{ steps.checksums.outputs.x64_sha256 }}`
+          branch: update-v${{ steps.version.outputs.version }}
+          labels: automerge
