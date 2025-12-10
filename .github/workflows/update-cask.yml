@@ -9,6 +9,10 @@ on:
         description: 'Version to update to'
         required: true
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   update:
     runs-on: macos-latest
