@@ -1,6 +1,6 @@
 cask "prompt-pad" do
-  version "1.1.7"
-  sha256 arm:   "96e778c1c537ad95054ee14f74ce9168023d3b00b709c912ea5008bd62b7a450"
+  version "1.1.8"
+  sha256 arm:   "86cfb3cd41a92c2c8cdaa4616778ab9e28519833bf57333ff502aca200633f5b"
   url "https://github.com/mschnecke/prompt-pad/releases/download/v#{version}/PromptPad_#{version}_aarch64.pkg"
 
   name "PromptPad"
